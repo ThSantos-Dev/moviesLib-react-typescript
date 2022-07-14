@@ -21,6 +21,10 @@ body {
   background-color: var(--background-dark-color);
 }
 
+#root {
+  margin: 0 auto;
+}
+
 a {
   color: var(--primary-yellow);
   text-decoration: none;
@@ -51,7 +55,7 @@ a:hover {
   margin: 0 auto;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   gap: 2.5rem;
 

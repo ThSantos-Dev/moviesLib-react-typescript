@@ -1,6 +1,7 @@
 .movie_card {
-    flex: 30% 1 1;
+    flex: 30% 0 1;
     min-width: 350px;
+
     color: #fff;
 
     padding: 1rem;

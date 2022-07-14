@@ -15,44 +15,46 @@ const Navbar = () => {
   const [query, setQuery] = useState<string>("");
 
   // Instaciando useNavigate para redirecionar o usuário
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Função responsável por iniciar a busca de um filme pela query informada
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Validalção para verificar se o usuário digitou algo
-    if(query.trim().length === 0) return
+    if (query.trim().length === 0) return;
 
     // Redirecionando o usuário para a página de Search com a 'query string' da palavra digitada para busca
-    navigate(`/search?q=${query}`)
+    navigate(`/search?q=${query}`);
 
     // Limpando o campo de pesquisa
-    setQuery("")
-  }
+    setQuery("");
+  };
 
   return (
-    <nav id={styles.navbar}>
-      <h2>
-        <Link to="/">
-          <BiCameraMovie /> MoviesLib
-        </Link>
-      </h2>
+    <div id={styles.navbar}>
+      <nav>
+        <h2>
+          <Link to="/">
+            <BiCameraMovie /> MoviesLib
+          </Link>
+        </h2>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Busque um filme"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setQuery(e.target.value)
-          }
-          value={query}
-        />
-        <button type="submit">
-          <BiSearchAlt2 />{" "}
-        </button>
-      </form>
-    </nav>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Busque um filme"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setQuery(e.target.value)
+            }
+            value={query}
+          />
+          <button type="submit">
+            <BiSearchAlt2 />{" "}
+          </button>
+        </form>
+      </nav>
+    </div>
   );
 };
 

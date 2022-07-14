@@ -1,11 +1,16 @@
 #navbar {
+    background-color: var(--navbar-dark-background-color);
+}
+
+#navbar nav{
+    max-width: 1440px;
+
     padding: 1rem 2rem;
+    margin: 0 auto;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    background-color: var(--navbar-dark-background-color);
 }
 
 #navbar h2 a {
@@ -52,7 +57,7 @@
 
 /* Responsividade */
 @media only screen and (max-width: 464px) {
-    #navbar {
+    #navbar nav {
         flex-direction: column;
         gap: 30px;
 
