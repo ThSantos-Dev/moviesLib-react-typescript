@@ -1,0 +1,70 @@
+.movie_card {
+    flex: 30% 1 1;
+    min-width: 350px;
+    color: #fff;
+
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    
+    background-color: var(--background-dark-card)
+}
+
+.movie_card img {
+    max-width: 100%;
+}
+
+.movie_card svg {
+    color: var(--primary-yellow)
+}
+
+.movie_card a {
+    color: #000;
+    text-align: center;
+    font-weight: bold;
+
+    padding: 1rem .5rem;
+
+    border: 2px solid var(--primary-yellow);
+    border-radius: 4px;
+
+    transition: .4s;
+
+    background-color: var(--primary-yellow);
+}
+
+.movie_card a:hover {
+    color: var(--primary-yellow);
+
+    background-color: transparent;
+}
+
+
+
+/* Página de detalhes do filme  */
+.movie_card.movie_page {
+    width: 100%;
+
+    text-align: center;
+
+    background-color: transparent;
+}
+
+.movie_card.movie_page img {
+    margin-bottom: 1rem;
+}
+
+.movie_card.movie_page h2 {
+    font-size: 2rem;
+}
+
+.movie_card.movie_page p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .4rem;
+}
+

@@ -1,0 +1,16 @@
+.movie_page {
+    max-width: 600px;
+    
+    color: #fff;
+
+    margin: 2rem auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.movie_page svg {
+    font-size: 1.5rem;
+    color: var(--primary-yellow);
+}
+
