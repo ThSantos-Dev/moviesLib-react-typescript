@@ -22,15 +22,26 @@ const Home = () => {
   // Instanciando o dispatch para poder utlizar as funções do Reducer 
   const dispatch: any = useDispatch();
 
+  const [numberOfButtons, setNumberOfButtons] = useState<number>(9)
 
   // Carregando os dados
   useEffect(() => {
     dispatch(getTopRatedMovies());
+
+    if(window.screen.width <= 576) {
+      return setNumberOfButtons(3)
+    }
+
+    if(window.screen.width <= 875){
+      return setNumberOfButtons(5)
+    }
   }, []);
+
+
 
   return (
     <div className="container">
-      <PagenationBar numberOfPages={100}/>
+      <PagenationBar numberOfPages={100} numberOfButtons={numberOfButtons}/>
 
       <h2 className="title">Melhores filmes:</h2>
 

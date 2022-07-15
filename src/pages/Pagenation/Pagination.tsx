@@ -39,6 +39,7 @@ const Pagination = () => {
     if(window.screen.width <= 875){
       return setNumberOfButtons(5)
     }
+    
   }, [])
 
   return (
