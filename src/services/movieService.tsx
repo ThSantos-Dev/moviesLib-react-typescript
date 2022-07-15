@@ -18,6 +18,16 @@ const getTopRatedMovies = async (url: string) => {
   // Retornando a resposta da requisição
   return res;
 };
+// Função responsável por trazer a lista dos melhores filmes por página
+const getTopRatedMoviesByPage = async (url: string) => {
+  // Realizando a requisição para obter os melhores filmes
+  const res: IMovies | IMoviesError = await fetch(url)
+    .then((res) => res.json())
+    .catch((err) => err);
+
+  // Retornando a resposta da requisição
+  return res;
+};
 
 // Função responsável por trazer filmes com base em uma palavra digitada
 const getSearchedMovies = async (url: string) => {
@@ -43,6 +53,7 @@ const getMovie = async (url: string) => {
 
 const movieService = {
   getTopRatedMovies,
+  getTopRatedMoviesByPage,
   getSearchedMovies,
   getMovie
 };

@@ -9,6 +9,7 @@ import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/Home';
 import Movie from './pages/Movie/Movie';
 import Search from './pages/Search/Search';
+import Pagination from './pages/Pagenation/Pagination';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/movie/:id' element={<Movie />}/>
+          <Route path='/movies/page/:page' element={<Pagination />}/>
           <Route path='/search' element={<Search />}/>
         </Routes>
       </BrowserRouter>

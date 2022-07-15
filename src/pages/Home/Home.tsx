@@ -10,7 +10,10 @@ import { getTopRatedMovies } from "../../slices/movieSlice";
 
 // Interfaces
 import { IMovie } from "./../../interfaces/IMovie";
+
+// Components
 import MovieCard from './../../components/MovieCard/MovieCard';
+import PagenationBar from './../../components/PagenationBar/PagenationBar';
 
 const Home = () => {
   // Resgatando os states do Redux
@@ -19,6 +22,7 @@ const Home = () => {
   // Instanciando o dispatch para poder utlizar as funções do Reducer 
   const dispatch: any = useDispatch();
 
+
   // Carregando os dados
   useEffect(() => {
     dispatch(getTopRatedMovies());
@@ -26,12 +30,15 @@ const Home = () => {
 
   return (
     <div className="container">
+      <PagenationBar numberOfPages={100}/>
+
       <h2 className="title">Melhores filmes:</h2>
 
       <div className="movies-container">
         {loading && (<p>Carregando...</p>)}
         {movies.results && movies.results.map((movie: IMovie) => <MovieCard movie={movie} key={movie.id}/>)}
       </div>
+
     </div>
   );
 };

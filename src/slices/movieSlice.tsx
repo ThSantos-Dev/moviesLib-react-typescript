@@ -6,7 +6,7 @@
 
 // Import config
 const MOVIES_URL = import.meta.env.VITE_API;
-const SEARCH_URL = import.meta.env.VITE_SEARCH
+const SEARCH_URL = import.meta.env.VITE_SEARCH;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 // Redux
@@ -20,7 +20,7 @@ import movieService from "../services/movieService";
 import TMovie from "../types/TMovie";
 
 // Interfaces
-import { IMovies, IMoviesError } from './../interfaces/IMovies';
+import { IMovies, IMoviesError } from "./../interfaces/IMovies";
 
 // Estado inicial
 const initialState: TMovie = {
@@ -40,7 +40,33 @@ export const getTopRatedMovies = createAsyncThunk(
     const topRatedUrl: string = `${MOVIES_URL}top_rated?${API_KEY}&language=pt-BR`;
 
     // Chamando a função do service para listar os filmes melhor avaliados
-    const data: IMovies | IMoviesError = await movieService.getTopRatedMovies(topRatedUrl);
+    const data: IMovies | IMoviesError = await movieService.getTopRatedMovies(
+      topRatedUrl
+    );
+
+    // Validação para verificar se não houveram erros
+    if (data?.status_message) {
+      // Retornando uma mensagem de erro
+      return thunkAPI.rejectWithValue("Erro ao buscar filmes.");
+    }
+
+    // Retornando a resposta da requisição
+    return data;
+  }
+);
+
+// Função responsável por trazer a lista do filmes mais bem avaliados por página
+export const getTopRatedMoviesByPage = createAsyncThunk(
+  "movie/topRatedByPage",
+  async (page: number, thunkAPI) => {
+    // Configurando a URL
+    const topRatedUrl: string = `${MOVIES_URL}top_rated?${API_KEY}&page=${page}&language=pt-BR`;
+
+    console.log(topRatedUrl);
+
+    // Chamando a função do service para listar os filmes melhor avaliados
+    const data: IMovies | IMoviesError =
+      await movieService.getTopRatedMoviesByPage(topRatedUrl);
 
     // Validação para verificar se não houveram erros
     if (data?.status_message) {
@@ -58,39 +84,44 @@ export const getSearchedMovies = createAsyncThunk(
   "movie/search",
   async (query: string, thunkAPI) => {
     // Configurando a URL
-    const searchUrl: string = `${SEARCH_URL}?${API_KEY}&language=pt-BR&query=${query}`
+    const searchUrl: string = `${SEARCH_URL}?${API_KEY}&language=pt-BR&query=${query}`;
 
     // Chamando a função do service que retorna essa lista
-    const data: IMovies | IMoviesError = await movieService.getSearchedMovies(searchUrl)
+    const data: IMovies | IMoviesError = await movieService.getSearchedMovies(
+      searchUrl
+    );
 
     // Validação para verificar se houveram erros
-    if(data?.status_message){
-        // Retornando uma mensagem de erro
-        return thunkAPI.rejectWithValue("Erro ao buscar filmes.")
+    if (data?.status_message) {
+      // Retornando uma mensagem de erro
+      return thunkAPI.rejectWithValue("Erro ao buscar filmes.");
     }
 
     // Retornando os filmes encontrados
-    return data
+    return data;
   }
 );
 
 // Função responsável por trazer detalhes de um filme
-export const getMovie = createAsyncThunk("movie/details", async (id: string, thunkAPI) => {
+export const getMovie = createAsyncThunk(
+  "movie/details",
+  async (id: string, thunkAPI) => {
     // Configurando a URL da requisição
-    const movieUrl: string = `${MOVIES_URL}${id}?${API_KEY}&language=pt-BR`
+    const movieUrl: string = `${MOVIES_URL}${id}?${API_KEY}&language=pt-BR`;
 
     // Chamando a função do service para trazer detalhes de um filme
-    const data: IMovie | IMoviesError = await movieService.getMovie(movieUrl)
+    const data: IMovie | IMoviesError = await movieService.getMovie(movieUrl);
 
     // Validação para verificar se houveram erros
-    if(data?.status_message) {
-        // Retornando uma mensagem de erro 
-        return thunkAPI.rejectWithValue("Erro ao buscar detalhes do filme.")
+    if (data?.status_message) {
+      // Retornando uma mensagem de erro
+      return thunkAPI.rejectWithValue("Erro ao buscar detalhes do filme.");
     }
 
     // Retornando os detalhes do filme
-    return data
-})
+    return data;
+  }
+);
 
 // Criando o slicer
 export const movieSlice = createSlice({
@@ -99,7 +130,7 @@ export const movieSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    // Melhor avaliados
+      // Melhor avaliados
       .addCase(getTopRatedMovies.pending, (state) => {
         // Caso pendente
         state.loading = true;
@@ -120,49 +151,71 @@ export const movieSlice = createSlice({
         state.error = action.payload;
       })
 
-    //   Busca pelo título
-    .addCase(getSearchedMovies.pending, (state) => {
+      .addCase(getTopRatedMoviesByPage.pending, (state) => {
         // Caso pendente
         state.loading = true;
         state.error = null;
-    })
-    .addCase(getSearchedMovies.fulfilled, (state, action) => {
+
+        state.movies = {};
+      })
+      .addCase(getTopRatedMoviesByPage.fulfilled, (state, action) => {
         // Caso de certo
         state.loading = false;
         state.error = null;
 
         state.movies = action.payload;
-    })
-    .addCase(getSearchedMovies.rejected, (state, action) => {
+      })
+      .addCase(getTopRatedMoviesByPage.rejected, (state, action) => {
         // Caso de errado
+        state.loading = false;
         state.movies = {}
+
+        state.error = action.payload;
+      })
+
+      //   Busca pelo título
+      .addCase(getSearchedMovies.pending, (state) => {
+        // Caso pendente
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getSearchedMovies.fulfilled, (state, action) => {
+        // Caso de certo
+        state.loading = false;
+        state.error = null;
+
+        state.movies = action.payload;
+      })
+      .addCase(getSearchedMovies.rejected, (state, action) => {
+        // Caso de errado
+        state.movies = {};
 
         state.loading = false;
         state.error = action.payload;
-    })
+      })
 
-    // Detalhes do filme
-    .addCase(getMovie.pending, (state) => {
-      // Caso pendente
-      state.loading = true;
-      state.error = null;
+      // Detalhes do filme
+      .addCase(getMovie.pending, (state) => {
+        // Caso pendente
+        state.loading = true;
+        state.error = null;
 
-      state.movie = {}
-    })
-    .addCase(getMovie.fulfilled, (state, action) => {
-      // Caso de certo
-      state.loading = false;
-      state.error = null;
+        state.movie = {};
+      })
+      .addCase(getMovie.fulfilled, (state, action) => {
+        // Caso de certo
+        state.loading = false;
+        state.error = null;
 
-      state.movie = action.payload
-    })
-    .addCase(getMovie.rejected, (state, action) => {
-      // Caso de errado
-      state.loading = false;
-      state.movie = {}
+        state.movie = action.payload;
+      })
+      .addCase(getMovie.rejected, (state, action) => {
+        // Caso de errado
+        state.loading = false;
+        state.movie = {};
 
-      state.error = action.payload
-    })
+        state.error = action.payload;
+      });
   },
 });
 

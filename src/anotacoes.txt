@@ -1,0 +1,123 @@
+ // 1 - Definir a quantidade de botões para exibir e controlar
+  const qtdyButtons: number = (numberOfButtons + 1) / 2;
+
+  // 2 - Mudar o conteúdo dos botões de acordo com o avanço entre as páginas
+  const [leftButtons, setLeftButtons] = useState<string[]>([]);
+  const [rightButtons, setRightButtons] = useState<string[]>([]);
+
+  // Página atual
+  const [currentPage, setCurrentPage] = useState<number>(9);
+
+  // Instanciando dispatch para utilizar as funções do reducer
+  const dispatch: any = useDispatch();
+
+  // Transformando a quantidade de páginas em um array com a mesma quantidade de elementos
+  const arrayPages: string[] = [
+    ...Object.keys(Array.from({ length: numberOfPages })),
+  ];
+
+  // Função responsável por atualizar os botões
+  const updateButtons = (base: number): void => {
+    const currentIndex = arrayPages.findIndex(
+      (page) => parseInt(page) === base
+    );
+
+    let leftButtons: string[] = [];
+    let rightButtons: string[] = [];
+
+    // Setando valores dos botões
+    if(base >= numberOfButtons) {
+      // Adicionando valores ao array de botões da esquerda
+      for (let i = qtdyButtons; i >= 1 ; i--) {
+        leftButtons.push(arrayPages[currentIndex - i]);        
+      }
+
+      // Adicionando valores ao array de botões da direita
+      for (let i = 1; i >= 1 ; i--) {
+        
+      }
+    } 
+
+
+
+    // Atualizando os states
+    setLeftButtons(leftButtons);
+    setRightButtons(rightButtons);
+  };
+
+  // 2 - atualizar os botões
+  useEffect(() => {
+    // Chamando a função que atualiza os states dos botões
+    updateButtons(currentPage);
+
+  }, [currentPage]);
+
+  const handlePage = (page: number) => {
+    // 1 - atualizar o state de currentPage que automaticamente acionará o useEffect para atulizar os botões
+    setCurrentPage(page);
+    
+    // 3 - chamar a função do redux para atualizar os filmes
+    dispatch(getTopRatedMoviesByPage(page));
+
+  };
+
+  // 3 - Alterar o conteúdo da página
+
+  return (
+    <div>
+      {leftButtons &&
+        leftButtons.map((page, index) => (
+          <ButtonPagination
+            page={parseInt(page)}
+            handlePage={handlePage}
+            key={`page-${index}`}
+          />
+        ))}
+
+      {currentPage && <ButtonPagination page={currentPage} disabled={true} />}
+          
+      {rightButtons &&
+        rightButtons.map((page, index) => (
+          <ButtonPagination
+            page={parseInt(page)}
+            handlePage={handlePage}
+            key={`page-${index}`}
+          />
+        ))}
+    </div>
+  );
+
+
+
+
+
+
+  <span>Número de páginas: {numberOfPages}</span>
+      <br />
+      <p>Página atual: {currentPage}</p>
+      <p>
+        Botões da esqueda:{" "}
+        {leftButtons &&
+          leftButtons.map((btn: number) => (
+            <button onClick={() => handleUpdateButtons(btn)}>{btn}</button>
+          ))}
+      </p>
+      <p>
+        Botões da direita:{" "}
+        {rightButtons &&
+          rightButtons.map((btn: number) => (
+            <button onClick={() => handleUpdateButtons(btn)}>{btn}</button>
+          ))}
+      </p>
+      <p>
+        Preview:{" "}
+        {leftButtons &&
+          leftButtons.map((btn: number) => (
+            <button onClick={() => handleUpdateButtons(btn)}>{btn}</button>
+          ))}{" "}
+        {currentPage}{" "}
+        {rightButtons &&
+          rightButtons.map((btn: number) => (
+            <button onClick={() => handleUpdateButtons(btn)}>{btn}</button>
+          ))}
+      </p>
