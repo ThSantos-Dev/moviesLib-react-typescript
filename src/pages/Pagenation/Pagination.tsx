@@ -20,9 +20,6 @@ const Pagination = () => {
   // Resgatando o número da página passada na url
   const { page } = useParams<string>();
 
-  // Criando refencia para a controloar a responsividade
-  const containerRef: any = useRef();
-
   // Carregando os dados da página
   useEffect(() => {
     // Validação para verificar se o número passado como argumento é válido
@@ -38,17 +35,14 @@ const Pagination = () => {
     if(window.screen.width <= 576) {
       return setNumberOfButtons(3)
     }
-    
+
     if(window.screen.width <= 875){
       return setNumberOfButtons(5)
     }
-
-
-    
   }, [])
 
   return (
-    <div className="container" ref={containerRef}>
+    <div className="container" >
       <h2 className="title">Página: {page}</h2>
       <PagenationBar numberOfPages={100} page={parseInt(page!)} 
         numberOfButtons={numberOfButtons}

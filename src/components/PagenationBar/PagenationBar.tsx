@@ -112,7 +112,7 @@ const PagenationBar = ({ numberOfButtons = 9, numberOfPages, page = 1 }: Props) 
   //   Atualizando os botões toda vez em que a página for alterada
   useEffect(() => {
     setButtons();
-  }, [currentPage]);
+  }, [currentPage, numberOfButtons]);
 
   // Função responsável por atualizar o valor da lista de botões de acordo com a página atual
   const handlePage = (page: number): void => {
