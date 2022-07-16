@@ -51,11 +51,25 @@ const getMovie = async (url: string) => {
   return res
 };
 
+// Função responsável por buscar informações de um filme
+const getRecommendationsMovies = async (url: string) => {
+  // Realizando a requisição para obter os detalhes do filme
+  const res: IMovie | IMoviesError = await fetch(url)
+    .then((res) => res.json())
+    .catch((err) => err);
+
+  // Retornando resposta da requisição
+  return res
+};
+
+
+
 const movieService = {
   getTopRatedMovies,
   getMoviesByPage,
   getSearchedMovies,
-  getMovie
+  getMovie,
+  getRecommendationsMovies
 };
 
 export default movieService;

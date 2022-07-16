@@ -13,6 +13,7 @@ import { IMovie } from "./../../interfaces/IMovie";
 // Components
 import MovieCard from "./../../components/MovieCard/MovieCard";
 import PagenationBar from "../../components/PagenationBar/PagenationBar";
+import Loading from './../../components/Loading/Loading';
 
 const Search = () => {
   // Resgatando os states do Redux
@@ -49,7 +50,10 @@ const Search = () => {
     }
   }, [query, page]);
 
-  if (loading) return <p>Carregando...</p>;
+  // Exibindo loading
+  if(loading) {
+    return <Loading />
+  }
 
   return (
     <div className="container">

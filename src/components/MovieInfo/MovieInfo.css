@@ -18,7 +18,7 @@
 }
 
 .description {
-    padding-bottom: 10rem;
+    padding-bottom: 6rem;
 }
 
 .description p {
@@ -29,5 +29,8 @@
 @media only screen and (max-width: 600px){
     .info {
         padding: 0 20px;
+    }
+    .description {
+        padding-bottom: 1rem;
     }
 }

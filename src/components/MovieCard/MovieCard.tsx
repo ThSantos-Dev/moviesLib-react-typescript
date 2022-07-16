@@ -16,12 +16,13 @@ const IMAGE_URL = import.meta.env.VITE_IMG
 type Props = {
     movie: IMovie,
     showLink?: boolean,
-    moviePage?: boolean
+    moviePage?: boolean,
+    slider?: boolean
 };
 
-const MovieCard = ({movie, showLink = true, moviePage = false}: Props) => {
+const MovieCard = ({movie, showLink = true, moviePage = false, slider = false}: Props) => {
   return (
-    <div className={`${styles.movie_card} ${moviePage && styles.movie_page}`}>
+    <div className={`${styles.movie_card} ${moviePage && styles.movie_page} ${slider && styles.slider}`}>
         <img src={IMAGE_URL + movie.poster_path} alt={movie.title} />
         <h2>{movie.title}</h2>
 

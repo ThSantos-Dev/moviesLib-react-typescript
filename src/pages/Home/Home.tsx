@@ -14,10 +14,12 @@ import { IMovie } from "./../../interfaces/IMovie";
 // Components
 import MovieCard from "./../../components/MovieCard/MovieCard";
 import PagenationBar from "./../../components/PagenationBar/PagenationBar";
+import Loading from './../../components/Loading/Loading';
 
 const Home = () => {
   // Resgatando os states do Redux
   const { movies, loading, error } = useSelector((state: any) => state.movie);
+
 
   // Instanciando o dispatch para poder utlizar as funções do Reducer
   const dispatch: any = useDispatch();
@@ -36,6 +38,11 @@ const Home = () => {
       return setNumberOfButtons(5);
     }
   }, []);
+
+  // Exibindo loading
+  if(loading) {
+    return <Loading />
+  }
 
   return (
     <div className="container">

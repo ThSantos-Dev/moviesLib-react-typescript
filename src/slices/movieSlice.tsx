@@ -10,7 +10,7 @@ const SEARCH_URL = import.meta.env.VITE_SEARCH;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 // Redux
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, Slice } from "@reduxjs/toolkit";
 import { IMovie } from "../interfaces/IMovie";
 
 // Services
@@ -18,7 +18,7 @@ import movieService from "../services/movieService";
 
 // Types
 import TMovie from "../types/TMovie";
-import TSearch  from "../types/TSearch";
+import TSearch from "../types/TSearch";
 
 // Interfaces
 import { IMovies, IMoviesError } from "./../interfaces/IMovies";
@@ -27,6 +27,7 @@ import { IMovies, IMoviesError } from "./../interfaces/IMovies";
 const initialState: TMovie = {
   movies: {},
   movie: {},
+  recommendations: {},
 
   error: null,
   success: false,
@@ -104,7 +105,6 @@ export const getSearchedMovies = createAsyncThunk(
   }
 );
 
-
 // Função responsável por trazer a lista de filmes com base em uma palavra por página
 export const getSearchedMoviesByPage = createAsyncThunk(
   "movie/searchByPage",
@@ -139,7 +139,7 @@ export const getMovie = createAsyncThunk(
     const data: IMovie | IMoviesError = await movieService.getMovie(movieUrl);
 
     // Validação para verificar se houveram erros
-    if (data?.status_message) {
+    if (data.status_message) {
       // Retornando uma mensagem de erro
       return thunkAPI.rejectWithValue("Erro ao buscar detalhes do filme.");
     }
@@ -149,8 +149,30 @@ export const getMovie = createAsyncThunk(
   }
 );
 
+// Função responsável por trazer recomendações de filmes com base na seleção atual
+export const getRecommendationsMovies = createAsyncThunk(
+  "movie/getRecommendations",
+  async (id: string, thunkAPI) => {
+    // Configurando a URL da requisição
+    const recommendationsUrl = `${MOVIES_URL}${id}/recommendations?${API_KEY}&language=pt-BR` 
+
+    // Chamando a função do service para trazer as recomendações
+    const data: IMovies | IMoviesError = await movieService.getRecommendationsMovies(recommendationsUrl)
+
+    // Validação para verificar se houveram erros
+    if (data.status_message) {
+      // Retornando uma mensagem de erro
+      return thunkAPI.rejectWithValue("Erro ao buscar recomendações.");
+    }
+
+    // Retornando as recomendações
+    return data
+
+  }
+);
+
 // Criando o slicer
-export const movieSlice = createSlice({
+export const movieSlice: Slice<TMovie> = createSlice({
   name: "movie",
   initialState,
   reducers: {},
@@ -227,19 +249,19 @@ export const movieSlice = createSlice({
         state.loading = true;
         state.error = null;
 
-        state.movies = {}
+        state.movies = {};
       })
       .addCase(getSearchedMoviesByPage.fulfilled, (state, action) => {
         // Caso de certo
         state.loading = false;
         state.error = null;
 
-        state.movies = action.payload
+        state.movies = action.payload;
       })
       .addCase(getSearchedMoviesByPage.rejected, (state, action) => {
         // Caso de errado
         state.loading = false;
-        state.movies = {}
+        state.movies = {};
 
         state.error = action.payload;
       })
@@ -265,7 +287,31 @@ export const movieSlice = createSlice({
         state.movie = {};
 
         state.error = action.payload;
-      });
+      })
+
+      // Recomendações
+      .addCase(getRecommendationsMovies.pending, (state) => {
+        // Caso pendente
+        state.loading = true;
+        state.error = null;
+
+        state.recommendations = {};
+      })
+      .addCase(getRecommendationsMovies.fulfilled, (state, action) => {
+        // Caso de certo
+        state.loading = false;
+        state.error = null;
+
+        state.recommendations = action.payload;
+      })
+      .addCase(getRecommendationsMovies.rejected, (state, action) => {
+        // Caso de errado
+        state.loading = false;
+        state.recommendations = {}
+
+        state.error = action.payload
+      })
+
   },
 });
 

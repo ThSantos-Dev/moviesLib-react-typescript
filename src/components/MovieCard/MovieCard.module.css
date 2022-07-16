@@ -69,3 +69,23 @@
     gap: .4rem;
 }
 
+/* Slider */
+.movie_card.slider {
+    width: 150px;
+
+    background-color: transparent;
+}
+
+.movie_card.slider img {
+    margin-bottom: .1rem;
+}
+
+.movie_card.slider h2 {
+    display: none;
+}
+
+.movie_card.slider p {
+    display: none;
+}
+
+

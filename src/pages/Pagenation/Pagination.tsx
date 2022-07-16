@@ -19,6 +19,7 @@ import { IMovie } from "./../../interfaces/IMovie";
 // Components
 import PagenationBar from "./../../components/PagenationBar/PagenationBar";
 import MovieCard from "./../../components/MovieCard/MovieCard";
+import Loading from './../../components/Loading/Loading';
 
 const Pagination = () => {
   // Resgatando os states do rudux
@@ -75,8 +76,10 @@ const Pagination = () => {
     }
   }, [page]);
 
-  // Loading
-  if (loading) return <p>Carregando...</p>;
+  // Exibindo loading
+  if(loading) {
+    return <Loading />
+  }
 
   return (
     <div className="container">
