@@ -12,44 +12,48 @@ import { getTopRatedMovies } from "../../slices/movieSlice";
 import { IMovie } from "./../../interfaces/IMovie";
 
 // Components
-import MovieCard from './../../components/MovieCard/MovieCard';
-import PagenationBar from './../../components/PagenationBar/PagenationBar';
+import MovieCard from "./../../components/MovieCard/MovieCard";
+import PagenationBar from "./../../components/PagenationBar/PagenationBar";
 
 const Home = () => {
   // Resgatando os states do Redux
   const { movies, loading, error } = useSelector((state: any) => state.movie);
 
-  // Instanciando o dispatch para poder utlizar as funções do Reducer 
+  // Instanciando o dispatch para poder utlizar as funções do Reducer
   const dispatch: any = useDispatch();
 
-  const [numberOfButtons, setNumberOfButtons] = useState<number>(9)
+  const [numberOfButtons, setNumberOfButtons] = useState<number>(9);
 
   // Carregando os dados
   useEffect(() => {
     dispatch(getTopRatedMovies());
 
-    if(window.screen.width <= 576) {
-      return setNumberOfButtons(3)
+    if (window.screen.width <= 576) {
+      return setNumberOfButtons(3);
     }
 
-    if(window.screen.width <= 875){
-      return setNumberOfButtons(5)
+    if (window.screen.width <= 875) {
+      return setNumberOfButtons(5);
     }
   }, []);
 
-
-
   return (
     <div className="container">
-      <PagenationBar numberOfPages={100} numberOfButtons={numberOfButtons}/>
-
       <h2 className="title">Melhores filmes:</h2>
 
       <div className="movies-container">
-        {loading && (<p>Carregando...</p>)}
-        {movies.results && movies.results.map((movie: IMovie) => <MovieCard movie={movie} key={movie.id}/>)}
+        {loading && <p>Carregando...</p>}
+        {movies.results &&
+          movies.results.map((movie: IMovie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
       </div>
 
+      <PagenationBar
+        numberOfPages={100}
+        numberOfButtons={numberOfButtons}
+        redirectTo="/movies/page"
+      />
     </div>
   );
 };

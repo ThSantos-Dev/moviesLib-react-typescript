@@ -1,15 +1,23 @@
-#bar {
-  max-width: 1440px;
-
+.bar {
+  max-width: 1280px;
+  
   padding: 30px;
   margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#bar_buttons {
+  width: inherit;
 
   display: flex;
   justify-content: space-between;
   gap: 40px;
 }
 
-#bar button {
+#bar_buttons button {
   color: #000;
   font-size: 1.3rem;
 
@@ -27,8 +35,8 @@
   background-color: var(--primary-yellow);
 }
 
-#bar button:hover,
-#bar .current_page {
+#bar_buttons button:hover,
+#bar_buttons .current_page {
   color: var(--primary-yellow);
 
   background-color: transparent;
@@ -54,11 +62,11 @@
 
 /* Responsividade */
 @media only screen and (max-width: 464px) {
-  #bar {
+  #bar_buttons {
     gap: 20px;
   }
 
-  #bar .buttons_container {
+  #bar_buttons .buttons_container {
     justify-content: center;
     gap: 15px;
   }

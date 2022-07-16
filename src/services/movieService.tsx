@@ -19,7 +19,7 @@ const getTopRatedMovies = async (url: string) => {
   return res;
 };
 // Função responsável por trazer a lista dos melhores filmes por página
-const getTopRatedMoviesByPage = async (url: string) => {
+const getMoviesByPage = async (url: string) => {
   // Realizando a requisição para obter os melhores filmes
   const res: IMovies | IMoviesError = await fetch(url)
     .then((res) => res.json())
@@ -53,7 +53,7 @@ const getMovie = async (url: string) => {
 
 const movieService = {
   getTopRatedMovies,
-  getTopRatedMoviesByPage,
+  getMoviesByPage,
   getSearchedMovies,
   getMovie
 };

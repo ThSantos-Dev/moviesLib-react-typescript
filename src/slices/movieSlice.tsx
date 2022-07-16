@@ -18,6 +18,7 @@ import movieService from "../services/movieService";
 
 // Types
 import TMovie from "../types/TMovie";
+import TSearch  from "../types/TSearch";
 
 // Interfaces
 import { IMovies, IMoviesError } from "./../interfaces/IMovies";
@@ -45,7 +46,7 @@ export const getTopRatedMovies = createAsyncThunk(
     );
 
     // Validação para verificar se não houveram erros
-    if (data?.status_message) {
+    if (data.status_message) {
       // Retornando uma mensagem de erro
       return thunkAPI.rejectWithValue("Erro ao buscar filmes.");
     }
@@ -65,11 +66,12 @@ export const getTopRatedMoviesByPage = createAsyncThunk(
     console.log(topRatedUrl);
 
     // Chamando a função do service para listar os filmes melhor avaliados
-    const data: IMovies | IMoviesError =
-      await movieService.getTopRatedMoviesByPage(topRatedUrl);
+    const data: IMovies | IMoviesError = await movieService.getMoviesByPage(
+      topRatedUrl
+    );
 
     // Validação para verificar se não houveram erros
-    if (data?.status_message) {
+    if (data.status_message) {
       // Retornando uma mensagem de erro
       return thunkAPI.rejectWithValue("Erro ao buscar filmes.");
     }
@@ -84,7 +86,7 @@ export const getSearchedMovies = createAsyncThunk(
   "movie/search",
   async (query: string, thunkAPI) => {
     // Configurando a URL
-    const searchUrl: string = `${SEARCH_URL}?${API_KEY}&language=pt-BR&query=${query}`;
+    const searchUrl: string = `${SEARCH_URL}?${API_KEY}&query=${query}&language=pt-BR`;
 
     // Chamando a função do service que retorna essa lista
     const data: IMovies | IMoviesError = await movieService.getSearchedMovies(
@@ -92,7 +94,31 @@ export const getSearchedMovies = createAsyncThunk(
     );
 
     // Validação para verificar se houveram erros
-    if (data?.status_message) {
+    if (data.status_message) {
+      // Retornando uma mensagem de erro
+      return thunkAPI.rejectWithValue("Erro ao buscar filmes.");
+    }
+
+    // Retornando os filmes encontrados
+    return data;
+  }
+);
+
+
+// Função responsável por trazer a lista de filmes com base em uma palavra por página
+export const getSearchedMoviesByPage = createAsyncThunk(
+  "movie/searchByPage",
+  async (search: TSearch, thunkAPI) => {
+    // Configurando a URL
+    const searchUrl: string = `${SEARCH_URL}?&${API_KEY}&query=${search.query}&page=${search.page}&language=pt-BR`;
+
+    // Chamando a função do service que retorna essa lista
+    const data: IMovies | IMoviesError = await movieService.getMoviesByPage(
+      searchUrl
+    );
+
+    // Validação para verificar se houveram erros
+    if (data.status_message) {
       // Retornando uma mensagem de erro
       return thunkAPI.rejectWithValue("Erro ao buscar filmes.");
     }
@@ -151,6 +177,7 @@ export const movieSlice = createSlice({
         state.error = action.payload;
       })
 
+      // Melhor avalidos por página
       .addCase(getTopRatedMoviesByPage.pending, (state) => {
         // Caso pendente
         state.loading = true;
@@ -168,7 +195,7 @@ export const movieSlice = createSlice({
       .addCase(getTopRatedMoviesByPage.rejected, (state, action) => {
         // Caso de errado
         state.loading = false;
-        state.movies = {}
+        state.movies = {};
 
         state.error = action.payload;
       })
@@ -191,6 +218,29 @@ export const movieSlice = createSlice({
         state.movies = {};
 
         state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Busca pelo título por página
+      .addCase(getSearchedMoviesByPage.pending, (state) => {
+        // Caso pendente
+        state.loading = true;
+        state.error = null;
+
+        state.movies = {}
+      })
+      .addCase(getSearchedMoviesByPage.fulfilled, (state, action) => {
+        // Caso de certo
+        state.loading = false;
+        state.error = null;
+
+        state.movies = action.payload
+      })
+      .addCase(getSearchedMoviesByPage.rejected, (state, action) => {
+        // Caso de errado
+        state.loading = false;
+        state.movies = {}
+
         state.error = action.payload;
       })
 

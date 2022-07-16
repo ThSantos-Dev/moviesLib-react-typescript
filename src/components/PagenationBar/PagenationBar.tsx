@@ -14,9 +14,17 @@ type Props = {
   numberOfButtons?: number;
   numberOfPages: number;
   page?: number;
+  redirectTo: string;
+  query?: string;
 };
 
-const PagenationBar = ({ numberOfButtons = 9, numberOfPages, page = 1 }: Props) => {
+const PagenationBar = ({
+  numberOfButtons = 9,
+  numberOfPages,
+  page = 1,
+  redirectTo,
+  query = "",
+}: Props) => {
   // States para controle de página
   const [currentPage, setCurrentPage] = useState<number>(page);
 
@@ -112,57 +120,66 @@ const PagenationBar = ({ numberOfButtons = 9, numberOfPages, page = 1 }: Props) 
   //   Atualizando os botões toda vez em que a página for alterada
   useEffect(() => {
     setButtons();
-  }, [currentPage, numberOfButtons]);
+  }, [currentPage, numberOfPages, numberOfButtons]);
 
   // Função responsável por atualizar o valor da lista de botões de acordo com a página atual
   const handlePage = (page: number): void => {
     // Validação para verificar se a página informada é válida
-    if(page > numberOfPages) {
-        page = 1
-    } else if(page <= 0) {
-        page = numberOfPages
+    if (page > numberOfPages) {
+      page = 1;
+    } else if (page <= 0) {
+      page = numberOfPages;
     }
 
     // Alterando o valor da página atual
     setCurrentPage(page);
 
     // Redirecionando o usuário para a paginação
-    navigate(`/movies/page/${page}`);
+    navigate(`${redirectTo}/${page}${query && `?q=${query}`}`);
   };
 
+  //  Caso o número de páginas seja 1 não haverá paginação
+  if (numberOfPages < 1) return <></>;
+
   return (
-    <div id={styles.bar}>
-      <button onClick={() => handlePage(currentPage - 1)}>
-        <FiChevronLeft />
-      </button>
+    <div className={styles.bar}>
+      <h2>
+        Página {currentPage} de {numberOfPages}
+      </h2>
 
-      <div className={styles.buttons_container}>
-        {leftButtons &&
-          leftButtons.map((btn) => (
-            <ButtonPagination
-              page={btn}
-              handlePage={handlePage}
-              key={`page-${btn}`}
-            />
-          ))}
-
-        <button disabled className={styles.current_page}>
-          {currentPage}
+      <div id={styles.bar_buttons}>
+        <button onClick={() => handlePage(currentPage - 1)}>
+          <FiChevronLeft />
         </button>
 
-        {rightButtons &&
-          rightButtons.map((btn) => (
-            <ButtonPagination
-              page={btn}
-              handlePage={handlePage}
-              key={`page-${btn}`}
-            />
-          ))}
-      </div>
+        <div className={styles.buttons_container}>
+          {leftButtons &&
+            leftButtons.map((btn) => (
+              <ButtonPagination
+                page={btn}
+                handlePage={handlePage}
+                key={`page-${btn}`}
+              />
+            ))}
 
-      <button onClick={() => handlePage(currentPage + 1)}>
-        <FiChevronRight />
-      </button>
+          <button disabled className={styles.current_page}>
+            {currentPage}
+          </button>
+
+          {rightButtons &&
+            rightButtons.map((btn) => (
+              <ButtonPagination
+                page={btn}
+                handlePage={handlePage}
+                key={`page-${btn}`}
+              />
+            ))}
+        </div>
+
+        <button onClick={() => handlePage(currentPage + 1)}>
+          <FiChevronRight />
+        </button>
+      </div>
     </div>
   );
 };
