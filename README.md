@@ -4,7 +4,7 @@
 
 <p>A API utilizada é a do <a href="https://developers.themoviedb.org/3/getting-started/introduction">TheMovieDB</a>. Se trata de uma base de dados sobre: filmes, séries e atores.</p>
 
-<p>Preview do projeto: <a href="https://movies-lib-react-typescript-f7s4bzc67-thsantos-dev.vercel.app/">MoviesLib - React</a></p>
+<p>Preview do projeto: <a href="https://movies-lib-react-typescript-d8ixwv675-thsantos-dev.vercel.app/">MoviesLib - React</a></p>
 
 ## Tecnologias utilizadas:
 <ul>
