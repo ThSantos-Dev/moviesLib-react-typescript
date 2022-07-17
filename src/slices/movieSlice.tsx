@@ -42,7 +42,7 @@ export const getTopRatedMovies = createAsyncThunk(
     const topRatedUrl: string = `${MOVIES_URL}top_rated?${API_KEY}&language=pt-BR`;
 
     // Chamando a função do service para listar os filmes melhor avaliados
-    const data: IMovies | IMoviesError = await movieService.getTopRatedMovies(
+    const data: IMovies | IMoviesError = await movieService.getData(
       topRatedUrl
     );
 
@@ -64,10 +64,8 @@ export const getTopRatedMoviesByPage = createAsyncThunk(
     // Configurando a URL
     const topRatedUrl: string = `${MOVIES_URL}top_rated?${API_KEY}&page=${page}&language=pt-BR`;
 
-    console.log(topRatedUrl);
-
     // Chamando a função do service para listar os filmes melhor avaliados
-    const data: IMovies | IMoviesError = await movieService.getMoviesByPage(
+    const data: IMovies | IMoviesError = await movieService.getData(
       topRatedUrl
     );
 
@@ -90,7 +88,7 @@ export const getSearchedMovies = createAsyncThunk(
     const searchUrl: string = `${SEARCH_URL}?${API_KEY}&query=${query}&language=pt-BR`;
 
     // Chamando a função do service que retorna essa lista
-    const data: IMovies | IMoviesError = await movieService.getSearchedMovies(
+    const data: IMovies | IMoviesError = await movieService.getData(
       searchUrl
     );
 
@@ -113,7 +111,7 @@ export const getSearchedMoviesByPage = createAsyncThunk(
     const searchUrl: string = `${SEARCH_URL}?&${API_KEY}&query=${search.query}&page=${search.page}&language=pt-BR`;
 
     // Chamando a função do service que retorna essa lista
-    const data: IMovies | IMoviesError = await movieService.getMoviesByPage(
+    const data: IMovies | IMoviesError = await movieService.getData(
       searchUrl
     );
 
@@ -136,7 +134,7 @@ export const getMovie = createAsyncThunk(
     const movieUrl: string = `${MOVIES_URL}${id}?${API_KEY}&language=pt-BR`;
 
     // Chamando a função do service para trazer detalhes de um filme
-    const data: IMovie | IMoviesError = await movieService.getMovie(movieUrl);
+    const data: IMovie | IMoviesError = await movieService.getData(movieUrl);
 
     // Validação para verificar se houveram erros
     if (data.status_message) {
@@ -157,7 +155,7 @@ export const getRecommendationsMovies = createAsyncThunk(
     const recommendationsUrl = `${MOVIES_URL}${id}/recommendations?${API_KEY}&language=pt-BR` 
 
     // Chamando a função do service para trazer as recomendações
-    const data: IMovies | IMoviesError = await movieService.getRecommendationsMovies(recommendationsUrl)
+    const data: IMovies | IMoviesError = await movieService.getData(recommendationsUrl)
 
     // Validação para verificar se houveram erros
     if (data.status_message) {
